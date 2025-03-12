@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Plus, File, Pencil, Trash } from "lucide-react";
+import TransactionDialog from "@/components/TransactionDialog";
 
 interface Purchase {
   id: number;
@@ -26,6 +27,8 @@ const Purchases = () => {
       totalValue: "R$ 521.116,00"
     }
   ]);
+  
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
     <div className="p-6">
@@ -36,7 +39,10 @@ const Purchases = () => {
             {purchases.length} {purchases.length === 1 ? "registro encontrado" : "registros encontrados"}
           </p>
         </div>
-        <Button className="bg-green-600 hover:bg-green-700">
+        <Button 
+          className="bg-green-600 hover:bg-green-700"
+          onClick={() => setIsDialogOpen(true)}
+        >
           <Plus className="mr-2 h-4 w-4" />
           Nova Compra
         </Button>
@@ -89,6 +95,15 @@ const Purchases = () => {
           </div>
         </CardContent>
       </Card>
+
+      {isDialogOpen && (
+        <TransactionDialog 
+          isOpen={isDialogOpen} 
+          onClose={() => setIsDialogOpen(false)} 
+          title="Nova Compra"
+          type="purchase"
+        />
+      )}
     </div>
   );
 };
