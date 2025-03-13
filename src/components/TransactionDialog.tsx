@@ -45,19 +45,31 @@ const TransactionDialog = ({ isOpen, onClose, title, type }: TransactionDialogPr
   const [bags, setBags] = useState("0");
   const [totalBag, setTotalBag] = useState("R$ 0,00");
 
+  // Calculate product unit value when bag value changes
+  useEffect(() => {
+    const bagValueNum = parseFloat(bagValue.replace(",", ".")) || 0;
+    const calculatedProductUnitValue = (bagValueNum / 60).toFixed(2).replace(".", ",");
+    setProductUnitValue(calculatedProductUnitValue);
+  }, [bagValue]);
+
+  // Calculate all derived values when inputs change
   useEffect(() => {
     // Convert to numbers and handle parsing
-    const freightNum = parseFloat(freightValue) || 0;
-    const qtyNum = parseFloat(quantity) || 0;
-    const productValueNum = parseFloat(productUnitValue) || 0;
-    const bagValueNum = parseFloat(bagValue) || 0;
+    const freightNum = parseFloat(freightValue.replace(",", ".")) || 0;
+    const qtyNum = parseFloat(quantity.replace(",", ".")) || 0;
+    const productValueNum = parseFloat(productUnitValue.replace(",", ".")) || 0;
+    const bagValueNum = parseFloat(bagValue.replace(",", ".")) || 0;
 
-    // Calculate values
-    const calculatedTotalFreight = freightNum;
-    const calculatedTotalProduct = qtyNum * productValueNum;
-    const calculatedTotalLoad = calculatedTotalFreight + calculatedTotalProduct;
+    // Calculate bags (Quantity ÷ 60)
     const calculatedBags = qtyNum > 0 ? Math.floor(qtyNum / 60) : 0;
-    const calculatedTotalBag = calculatedTotalLoad - (calculatedBags * bagValueNum);
+
+    // Calculate total product (Quantity × Valor do produto)
+    const calculatedTotalProduct = qtyNum * productValueNum;
+
+    // Calculate other values
+    const calculatedTotalFreight = freightNum;
+    const calculatedTotalLoad = calculatedTotalFreight + calculatedTotalProduct;
+    const calculatedTotalBag = calculatedBags > 0 ? calculatedTotalLoad / calculatedBags : 0;
 
     // Format currency values
     setTotalFreight(`R$ ${calculatedTotalFreight.toFixed(2).replace('.', ',')}`);
@@ -89,10 +101,6 @@ const TransactionDialog = ({ isOpen, onClose, title, type }: TransactionDialogPr
       totalBag
     });
     onClose();
-  };
-
-  const formatCurrency = (value: string) => {
-    return `R$ ${value}`;
   };
 
   return (
@@ -230,6 +238,7 @@ const TransactionDialog = ({ isOpen, onClose, title, type }: TransactionDialogPr
                   placeholder="0.00" 
                   value={productUnitValue}
                   onChange={(e) => setProductUnitValue(e.target.value)}
+                  readOnly
                 />
               </div>
               <span className="text-xs text-muted-foreground">Valor da saca dividido por 60</span>
