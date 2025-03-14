@@ -2,8 +2,9 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Plus, File, Pencil, Trash } from "lucide-react";
+import { Plus, File, Pencil, Trash, Eye } from "lucide-react";
 import TransactionDialog from "@/components/TransactionDialog";
+import TransactionDetailsDialog from "@/components/TransactionDetailsDialog";
 
 interface Purchase {
   id: number;
@@ -29,6 +30,26 @@ const Purchases = () => {
   ]);
   
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
+  const [selectedPurchase, setSelectedPurchase] = useState<Purchase | null>(null);
+
+  const handleViewDetails = (purchase: Purchase) => {
+    setSelectedPurchase(purchase);
+    setIsDetailsDialogOpen(true);
+  };
+
+  const handleEdit = () => {
+    setIsDetailsDialogOpen(false);
+    // You could open the edit dialog here if you want
+    console.log("Edit purchase:", selectedPurchase);
+  };
+
+  const handleDelete = () => {
+    if (selectedPurchase) {
+      setPurchases(purchases.filter(purchase => purchase.id !== selectedPurchase.id));
+      setIsDetailsDialogOpen(false);
+    }
+  };
 
   return (
     <div className="p-6">
@@ -77,8 +98,12 @@ const Purchases = () => {
                     <td className="p-4 align-middle">{purchase.totalValue}</td>
                     <td className="p-4 align-middle">
                       <div className="flex justify-center space-x-2">
-                        <Button variant="ghost" size="icon">
-                          <File className="h-4 w-4" />
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          onClick={() => handleViewDetails(purchase)}
+                        >
+                          <Eye className="h-4 w-4" />
                         </Button>
                         <Button variant="ghost" size="icon">
                           <Pencil className="h-4 w-4" />
@@ -102,6 +127,17 @@ const Purchases = () => {
           onClose={() => setIsDialogOpen(false)} 
           title="Nova Compra"
           type="purchase"
+        />
+      )}
+
+      {isDetailsDialogOpen && selectedPurchase && (
+        <TransactionDetailsDialog
+          isOpen={isDetailsDialogOpen}
+          onClose={() => setIsDetailsDialogOpen(false)}
+          transaction={selectedPurchase}
+          type="purchase"
+          onEdit={handleEdit}
+          onDelete={handleDelete}
         />
       )}
     </div>

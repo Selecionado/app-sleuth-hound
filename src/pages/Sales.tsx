@@ -2,8 +2,9 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Plus, File, Pencil, Trash } from "lucide-react";
+import { Plus, File, Pencil, Trash, Eye } from "lucide-react";
 import TransactionDialog from "@/components/TransactionDialog";
+import TransactionDetailsDialog from "@/components/TransactionDetailsDialog";
 
 interface Sale {
   id: number;
@@ -29,6 +30,26 @@ const Sales = () => {
   ]);
   
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
+  const [selectedSale, setSelectedSale] = useState<Sale | null>(null);
+
+  const handleViewDetails = (sale: Sale) => {
+    setSelectedSale(sale);
+    setIsDetailsDialogOpen(true);
+  };
+
+  const handleEdit = () => {
+    setIsDetailsDialogOpen(false);
+    // You could open the edit dialog here if you want
+    console.log("Edit sale:", selectedSale);
+  };
+
+  const handleDelete = () => {
+    if (selectedSale) {
+      setSales(sales.filter(sale => sale.id !== selectedSale.id));
+      setIsDetailsDialogOpen(false);
+    }
+  };
 
   return (
     <div className="p-6">
@@ -77,8 +98,12 @@ const Sales = () => {
                     <td className="p-4 align-middle">{sale.totalValue}</td>
                     <td className="p-4 align-middle">
                       <div className="flex justify-center space-x-2">
-                        <Button variant="ghost" size="icon">
-                          <File className="h-4 w-4" />
+                        <Button 
+                          variant="ghost" 
+                          size="icon"
+                          onClick={() => handleViewDetails(sale)}
+                        >
+                          <Eye className="h-4 w-4" />
                         </Button>
                         <Button variant="ghost" size="icon">
                           <Pencil className="h-4 w-4" />
@@ -102,6 +127,17 @@ const Sales = () => {
           onClose={() => setIsDialogOpen(false)} 
           title="Nova Venda"
           type="sale"
+        />
+      )}
+
+      {isDetailsDialogOpen && selectedSale && (
+        <TransactionDetailsDialog
+          isOpen={isDetailsDialogOpen}
+          onClose={() => setIsDetailsDialogOpen(false)}
+          transaction={selectedSale}
+          type="sale"
+          onEdit={handleEdit}
+          onDelete={handleDelete}
         />
       )}
     </div>
