@@ -18,6 +18,7 @@ import {
 import { CalendarIcon, X } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface TransactionDialogProps {
   isOpen: boolean;
@@ -37,6 +38,7 @@ const TransactionDialog = ({ isOpen, onClose, title, type }: TransactionDialogPr
   const [bagValue, setBagValue] = useState("0");
   const [quantity, setQuantity] = useState("0");
   const [productUnitValue, setProductUnitValue] = useState("0.00");
+  const [notifyUsers, setNotifyUsers] = useState(true);
 
   // Calculated values
   const [totalFreight, setTotalFreight] = useState("R$ 0,00");
@@ -98,14 +100,15 @@ const TransactionDialog = ({ isOpen, onClose, title, type }: TransactionDialogPr
       totalProduct,
       totalLoad,
       bags,
-      totalBag
+      totalBag,
+      notifyUsers
     });
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-background rounded-lg w-full max-w-5xl max-h-[95vh] overflow-auto">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4 overflow-auto">
+      <div className="bg-background rounded-lg w-full max-w-4xl max-h-[90vh] overflow-auto">
         <div className="flex justify-between items-center p-4 border-b">
           <h2 className="text-xl font-semibold">{title}</h2>
           <Button variant="ghost" size="icon" onClick={onClose}>
@@ -114,9 +117,7 @@ const TransactionDialog = ({ isOpen, onClose, title, type }: TransactionDialogPr
         </div>
 
         <div className="p-6">
-          <h3 className="text-lg font-semibold mb-4">{type === "purchase" ? "Compra" : "Venda"}</h3>
-
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Date and Invoice */}
             <div>
               <label className="block text-sm font-medium mb-1">Data</label>
@@ -153,12 +154,42 @@ const TransactionDialog = ({ isOpen, onClose, title, type }: TransactionDialogPr
               />
             </div>
 
+            {/* Entity and Product */}
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                {type === "purchase" ? "Fornecedor" : "Cliente"}
+              </label>
+              <Select value={entity} onValueChange={setEntity}>
+                <SelectTrigger>
+                  <SelectValue placeholder={`Selecione...`} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="entity1">POTENCIAGRO LTDA</SelectItem>
+                  <SelectItem value="entity2">Entidade 2</SelectItem>
+                  <SelectItem value="entity3">Entidade 3</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Produto</label>
+              <Select value={product} onValueChange={setProduct}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="product1">Soja em Grãos - Padrão</SelectItem>
+                  <SelectItem value="product2">Produto 2</SelectItem>
+                  <SelectItem value="product3">Produto 3</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
             {/* Carrier and License Plate */}
             <div>
               <label className="block text-sm font-medium mb-1">Transportadora</label>
               <Select value={carrier} onValueChange={setCarrier}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Selecione a transportadora" />
+                  <SelectValue placeholder="Selecione..." />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="transportadora1">Transportadora 1</SelectItem>
@@ -168,81 +199,15 @@ const TransactionDialog = ({ isOpen, onClose, title, type }: TransactionDialogPr
               </Select>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Placa</label>
+              <label className="block text-sm font-medium mb-1">Placa do Veículo</label>
               <Input 
-                placeholder="PLACA DO VEÍCULO" 
+                placeholder="Placa do veículo" 
                 value={licensePlate}
                 onChange={(e) => setLicensePlate(e.target.value)}
               />
             </div>
 
-            {/* Freight Value and Entity */}
-            <div>
-              <label className="block text-sm font-medium mb-1">Valor do Frete</label>
-              <Input 
-                placeholder="0" 
-                value={freightValue}
-                onChange={(e) => setFreightValue(e.target.value)}
-              />
-              <span className="text-xs text-muted-foreground">Formato: R$ 105,50</span>
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                {type === "purchase" ? "Fornecedor" : "Cliente"}
-              </label>
-              <Select value={entity} onValueChange={setEntity}>
-                <SelectTrigger>
-                  <SelectValue placeholder={`Selecione o ${type === "purchase" ? "fornecedor" : "cliente"}`} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="entity1">POTENCIAGRO LTDA</SelectItem>
-                  <SelectItem value="entity2">Entidade 2</SelectItem>
-                  <SelectItem value="entity3">Entidade 3</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Product and Bag Value */}
-            <div>
-              <label className="block text-sm font-medium mb-1">Produto</label>
-              <Select value={product} onValueChange={setProduct}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione o produto" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="product1">Soja em Grãos - Padrão</SelectItem>
-                  <SelectItem value="product2">Produto 2</SelectItem>
-                  <SelectItem value="product3">Produto 3</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Valor Saca</label>
-              <Input 
-                placeholder="0" 
-                value={bagValue}
-                onChange={(e) => setBagValue(e.target.value)}
-              />
-              <span className="text-xs text-muted-foreground">Formato: R$ 105,50</span>
-            </div>
-
-            {/* Product Value and Quantity */}
-            <div>
-              <label className="block text-sm font-medium mb-1">Valor do Produto</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                  <span className="text-gray-500">R$</span>
-                </div>
-                <Input 
-                  className="pl-10"
-                  placeholder="0.00" 
-                  value={productUnitValue}
-                  onChange={(e) => setProductUnitValue(e.target.value)}
-                  readOnly
-                />
-              </div>
-              <span className="text-xs text-muted-foreground">Valor da saca dividido por 60</span>
-            </div>
+            {/* Quantity and Values */}
             <div>
               <label className="block text-sm font-medium mb-1">Quantidade (kg)</label>
               <Input 
@@ -250,43 +215,82 @@ const TransactionDialog = ({ isOpen, onClose, title, type }: TransactionDialogPr
                 value={quantity}
                 onChange={(e) => setQuantity(e.target.value)}
               />
-              <span className="text-xs text-muted-foreground">Valor inteiro em quilogramas (ex: 53.800)</span>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Valor por kg</label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <span className="text-gray-500">R$</span>
+                </div>
+                <Input 
+                  className="pl-10"
+                  placeholder="por kg" 
+                  value={productUnitValue}
+                  onChange={(e) => setProductUnitValue(e.target.value)}
+                />
+              </div>
+            </div>
+
+            {/* Bag Value and Freight Value */}
+            <div>
+              <label className="block text-sm font-medium mb-1">Valor por saca</label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <span className="text-gray-500">R$</span>
+                </div>
+                <Input 
+                  className="pl-10"
+                  placeholder="por saca de 60kg" 
+                  value={bagValue}
+                  onChange={(e) => setBagValue(e.target.value)}
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Frete por kg</label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <span className="text-gray-500">R$</span>
+                </div>
+                <Input 
+                  className="pl-10"
+                  placeholder="por kg" 
+                  value={freightValue}
+                  onChange={(e) => setFreightValue(e.target.value)}
+                />
+              </div>
             </div>
           </div>
 
-          {/* Results Section */}
-          <div className="mt-8">
-            <h3 className="text-lg font-semibold mb-4">Resultados</h3>
-            
-            <div className="grid grid-cols-2 gap-6">
-              <div>
-                <p className="text-sm font-medium">Total Frete:</p>
-                <p className="text-lg font-semibold">{totalFreight}</p>
-                <p className="text-xs text-muted-foreground">Quantidade × Valor do frete ÷ 1.000</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium">Total Produto:</p>
+          {/* Calculated Values */}
+          <div className="mt-6">
+            <h3 className="text-md font-semibold mb-2">Valores Calculados</h3>
+            <div className="grid grid-cols-3 gap-4 bg-gray-100 dark:bg-[#11182b] rounded-md overflow-hidden">
+              <div className="p-4">
+                <p className="text-sm font-medium">Produto</p>
                 <p className="text-lg font-semibold">{totalProduct}</p>
-                <p className="text-xs text-muted-foreground">Quantidade × Valor do produto</p>
               </div>
-              
-              <div>
-                <p className="text-sm font-medium">Valor total da carga:</p>
+              <div className="p-4">
+                <p className="text-sm font-medium">Frete</p>
+                <p className="text-lg font-semibold">{totalFreight}</p>
+              </div>
+              <div className="p-4 bg-blue-50 dark:bg-[#1e293b]">
+                <p className="text-sm font-medium">Total</p>
                 <p className="text-lg font-semibold">{totalLoad}</p>
-                <p className="text-xs text-muted-foreground">Total Frete + Total Produto</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium">Sacas:</p>
-                <p className="text-lg font-semibold">{bags}</p>
-                <p className="text-xs text-muted-foreground">Quantidade ÷ 60</p>
-              </div>
-              
-              <div className="col-span-2">
-                <p className="text-sm font-medium">Valor total saca:</p>
-                <p className="text-lg font-semibold">{totalBag}</p>
-                <p className="text-xs text-muted-foreground">Valor total da carga ÷ Sacas</p>
               </div>
             </div>
+          </div>
+
+          {/* Notify Users Checkbox */}
+          <div className="flex items-center mt-6">
+            <Checkbox 
+              id="notifyUsers" 
+              checked={notifyUsers} 
+              onCheckedChange={(checked) => setNotifyUsers(checked === true)}
+            />
+            <label htmlFor="notifyUsers" className="ml-2 text-sm text-gray-600 dark:text-gray-300">
+              Notificar outros usuários sobre esta operação
+            </label>
           </div>
 
           {/* Action Buttons */}
