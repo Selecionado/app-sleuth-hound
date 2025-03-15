@@ -42,7 +42,7 @@ const Layout = () => {
             <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs">
               LA
             </div>
-            <div className="ml-2 text-xs bg-gray-700 text-white px-1.5 py-0.5 rounded">v2.0</div>
+            <div className="ml-2 text-xs bg-gray-700 text-white px-1.5 py-0.5 rounded">v2.5</div>
           </div>
         </div>
         <div className="flex-1 overflow-auto">
