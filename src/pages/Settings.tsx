@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { 
   Card, 
   CardContent
@@ -33,8 +33,11 @@ import {
   UserPlus,
   Edit,
   Trash2,
-  MoreVertical
+  MoreVertical,
+  Sun
 } from "lucide-react";
+import { useDarkMode } from "@/hooks/use-dark-mode";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 interface User {
   id: string;
@@ -46,7 +49,7 @@ interface User {
 
 const Settings = () => {
   const [systemName, setSystemName] = useState("POTENCIAGRO");
-  const [darkMode, setDarkMode] = useState(false);
+  const { darkMode, setDarkMode } = useDarkMode();
   const [selectedColor, setSelectedColor] = useState("#4CAF50"); // Green as default
   const [dialogOpen, setDialogOpen] = useState(false);
   const [users, setUsers] = useState<User[]>([
@@ -179,19 +182,21 @@ const Settings = () => {
                       </div>
                       
                       <div>
-                        <div className="flex items-center justify-between">
-                          <Label htmlFor="dark-mode" className="flex items-center gap-2">
+                        <Label className="block mb-2">Modo de Tema</Label>
+                        <ToggleGroup type="single" value={darkMode ? "dark" : "light"} onValueChange={(value) => {
+                          if (value) setDarkMode(value === "dark");
+                        }} className="justify-start">
+                          <ToggleGroupItem value="light" aria-label="Modo Claro" className="flex items-center gap-2 data-[state=on]:bg-blue-600">
+                            <Sun className="h-4 w-4" />
+                            Claro
+                          </ToggleGroupItem>
+                          <ToggleGroupItem value="dark" aria-label="Modo Escuro" className="flex items-center gap-2 data-[state=on]:bg-blue-600">
                             <Moon className="h-4 w-4" />
-                            Modo Escuro
-                          </Label>
-                          <Switch
-                            id="dark-mode"
-                            checked={darkMode}
-                            onCheckedChange={setDarkMode}
-                          />
-                        </div>
-                        <div className="ml-6 text-sm text-gray-400">
-                          Ativado
+                            Escuro
+                          </ToggleGroupItem>
+                        </ToggleGroup>
+                        <div className="mt-2 text-sm text-gray-400">
+                          {darkMode ? "Modo escuro ativado" : "Modo claro ativado"}
                         </div>
                       </div>
                       
