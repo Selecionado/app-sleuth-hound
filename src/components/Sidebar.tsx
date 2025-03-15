@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -11,8 +12,9 @@ import {
   MessageSquare,
   FileText,
   Settings,
-  Database,
   Link2,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 
 interface MenuItemProps {
@@ -85,44 +87,54 @@ const Sidebar = ({ onCloseMobile }: { onCloseMobile?: () => void }) => {
   return (
     <div
       className={cn(
-        "flex flex-col h-full bg-[#1e2738] text-white border-r border-[#2a3447] w-64",
-        !isSidebarOpen ? "w-16" : ""
+        "flex flex-col h-full bg-[#1e2738] text-white border-r border-[#2a3447] transition-all duration-300",
+        isSidebarOpen ? "w-64" : "w-20"
       )}
     >
       <div className="p-4 flex items-center justify-between">
-        <span className="text-lg font-semibold">POTENCIAGRO</span>
-        <button onClick={toggleSidebar} className="focus:outline-none">
-          {/* You can use an icon here to toggle the sidebar */}
-          {isSidebarOpen ? "<<" : ">>"}
+        {isSidebarOpen ? (
+          <span className="text-lg font-semibold">POTENCIAGRO</span>
+        ) : (
+          <span className="text-lg font-semibold mx-auto">PG</span>
+        )}
+        <button 
+          onClick={toggleSidebar} 
+          className="flex items-center justify-center h-8 w-8 rounded-full bg-[#2a3447] hover:bg-[#3a4457] transition-colors focus:outline-none"
+        >
+          {isSidebarOpen ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
         </button>
       </div>
-      <div className="flex-grow p-4">
-        <ul className="space-y-2">
+      
+      <div className="flex-grow py-4 overflow-y-auto">
+        <ul className="space-y-1 px-3">
           {menuItems.map((item) => (
             <li key={item.label}>
               <Link
                 to={item.href}
                 onClick={onCloseMobile}
                 className={cn(
-                  "flex items-center space-x-3 p-2 rounded-md hover:bg-[#2a3447] transition-colors duration-200",
+                  "flex items-center py-2 px-3 rounded-md transition-colors duration-200",
                   location.pathname === item.href
-                    ? "bg-[#2a3447] font-semibold"
-                    : "font-medium"
+                    ? "bg-[#2a3447] font-semibold text-white"
+                    : "font-medium text-gray-300 hover:bg-[#2a3447] hover:text-white"
                 )}
               >
-                {item.icon}
-                <span className={cn(!isSidebarOpen ? "hidden" : "")}>
-                  {item.label}
-                </span>
+                <div className={cn("flex items-center", !isSidebarOpen && "justify-center w-full")}>
+                  {item.icon}
+                  {isSidebarOpen && <span className="ml-3">{item.label}</span>}
+                </div>
               </Link>
             </li>
           ))}
         </ul>
       </div>
-      <div className="p-4 border-t border-[#2a3447]">
-        <p className="text-sm text-gray-400">
-          Versão 2.0
-        </p>
+      
+      <div className="p-4 border-t border-[#2a3447] flex items-center justify-center">
+        {isSidebarOpen ? (
+          <p className="text-sm text-gray-400">Versão 2.0</p>
+        ) : (
+          <p className="text-sm text-gray-400">v2</p>
+        )}
       </div>
     </div>
   );
