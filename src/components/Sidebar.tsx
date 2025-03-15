@@ -13,6 +13,10 @@ import {
   Settings 
 } from "lucide-react";
 
+interface SidebarProps {
+  onCloseMobile?: () => void;
+}
+
 const navItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/" },
   { icon: Users, label: "Entidades", path: "/entidades" },
@@ -25,7 +29,7 @@ const navItems = [
   { icon: Settings, label: "Configurações", path: "/configuracoes" },
 ];
 
-const Sidebar = () => {
+const Sidebar = ({ onCloseMobile }: SidebarProps) => {
   const location = useLocation();
   
   return (
@@ -39,12 +43,13 @@ const Sidebar = () => {
         </div>
       </div>
       
-      <nav className="flex-1 p-2">
+      <nav className="flex-1 p-2 overflow-y-auto">
         <ul className="space-y-1">
           {navItems.map((item) => (
             <li key={item.path}>
               <Link
                 to={item.path}
+                onClick={onCloseMobile}
                 className={cn(
                   "flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors",
                   location.pathname === item.path || 

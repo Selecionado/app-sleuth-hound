@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Pencil, Trash } from "lucide-react";
+import { Pencil, Trash, FileText, Download } from "lucide-react";
 
 interface IndustrializationDetailsDialogProps {
   isOpen: boolean;
@@ -44,7 +44,7 @@ const IndustrializationDetailsDialog = ({
 }: IndustrializationDetailsDialogProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[700px]">
+      <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Detalhes do Processo de Industrialização</DialogTitle>
           <DialogDescription>
@@ -52,7 +52,7 @@ const IndustrializationDetailsDialog = ({
           </DialogDescription>
         </DialogHeader>
         
-        <div className="grid grid-cols-2 gap-8 py-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-4">
           <div className="space-y-4">
             <h3 className="font-semibold text-lg border-b pb-2">Informações Gerais</h3>
             
@@ -95,6 +95,13 @@ const IndustrializationDetailsDialog = ({
                   </div>
                 ))}
               </div>
+            </div>
+            
+            <div className="pt-4">
+              <Button variant="outline" className="w-full">
+                <FileText className="mr-2 h-4 w-4" />
+                Ver Relatório Completo
+              </Button>
             </div>
           </div>
           
@@ -151,24 +158,29 @@ const IndustrializationDetailsDialog = ({
                 </div>
               </div>
             </div>
+            
+            <div className="pt-4">
+              <Button variant="outline" className="w-full">
+                <Download className="mr-2 h-4 w-4" />
+                Exportar Dados
+              </Button>
+            </div>
           </div>
         </div>
         
-        <DialogFooter>
-          <div className="flex w-full justify-between">
-            <Button variant="destructive">
-              <Trash className="mr-2 h-4 w-4" />
-              Excluir
+        <DialogFooter className="flex-col-reverse sm:flex-row sm:justify-between gap-2">
+          <Button variant="destructive">
+            <Trash className="mr-2 h-4 w-4" />
+            Excluir
+          </Button>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <Button variant="outline" onClick={onClose}>
+              Fechar
             </Button>
-            <div className="space-x-2">
-              <Button variant="outline" onClick={onClose}>
-                Fechar
-              </Button>
-              <Button>
-                <Pencil className="mr-2 h-4 w-4" />
-                Editar
-              </Button>
-            </div>
+            <Button>
+              <Pencil className="mr-2 h-4 w-4" />
+              Editar
+            </Button>
           </div>
         </DialogFooter>
       </DialogContent>
