@@ -22,7 +22,7 @@ interface IndustrializationDetailsDialogProps {
       name: string;
       quantity: string;
     }[];
-    status: "Concluída" | "Pendente";
+    status: "Concluída" | "Pendente" | "Em Processamento" | "Cancelada";
     details: {
       notaFiscal: string;
       placa: string;
@@ -42,6 +42,22 @@ const IndustrializationDetailsDialog = ({
   onClose,
   process
 }: IndustrializationDetailsDialogProps) => {
+  // Helper function to get the appropriate status color
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "Pendente":
+        return "bg-yellow-100 text-yellow-800";
+      case "Em Processamento":
+        return "bg-blue-100 text-blue-800";
+      case "Concluída":
+        return "bg-green-100 text-green-800";
+      case "Cancelada":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
@@ -64,11 +80,7 @@ const IndustrializationDetailsDialog = ({
               <div>
                 <p className="text-sm text-muted-foreground">Status</p>
                 <p>
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    process.status === "Concluída" 
-                      ? "bg-green-100 text-green-800" 
-                      : "bg-yellow-100 text-yellow-800"
-                  }`}>
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(process.status)}`}>
                     {process.status}
                   </span>
                 </p>
