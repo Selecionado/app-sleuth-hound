@@ -1,48 +1,53 @@
 
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Layout from "./components/Layout";
-import Dashboard from "./pages/Dashboard";
-import Entities from "./pages/Entities";
-import NotFound from "./pages/NotFound";
-import Products from "./pages/Products";
-import Purchases from "./pages/Purchases";
-import Sales from "./pages/Sales";
-import Industrialization from "./pages/Industrialization";
-import Reports from "./pages/Reports";
-import Messages from "./pages/Messages";
-import Settings from "./pages/Settings";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Toaster } from "@/components/ui/sonner";
+import Layout from "@/components/Layout";
+import Dashboard from "@/pages/Dashboard";
+import Products from "@/pages/Products";
+import Entities from "@/pages/Entities";
+import Purchases from "@/pages/Purchases";
+import Sales from "@/pages/Sales";
+import Industrialization from "@/pages/Industrialization";
+import Messages from "@/pages/Messages";
+import Reports from "@/pages/Reports";
+import Settings from "@/pages/Settings";
+import Index from "@/pages/Index";
+import NotFound from "@/pages/NotFound";
+import SharedView from "@/pages/SharedView";
+import SharedLinks from "@/pages/SharedLinks";
 
-const queryClient = new QueryClient();
+import "./App.css";
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <div className="dark">
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<Dashboard />} />
-              <Route path="entidades" element={<Entities />} />
-              <Route path="produtos" element={<Products />} />
-              <Route path="compras" element={<Purchases />} />
-              <Route path="vendas" element={<Sales />} />
-              <Route path="industrializacao" element={<Industrialization />} />
-              <Route path="relatorios" element={<Reports />} />
-              <Route path="mensagens" element={<Messages />} />
-              <Route path="configuracoes" element={<Settings />} />
-              <Route path="*" element={<NotFound />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </div>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      { index: true, element: <Index /> },
+      { path: "dashboard", element: <Dashboard /> },
+      { path: "products", element: <Products /> },
+      { path: "entities", element: <Entities /> },
+      { path: "purchases", element: <Purchases /> },
+      { path: "sales", element: <Sales /> },
+      { path: "industrialization", element: <Industrialization /> },
+      { path: "messages", element: <Messages /> },
+      { path: "reports", element: <Reports /> },
+      { path: "settings", element: <Settings /> },
+      { path: "shared-links", element: <SharedLinks /> },
+    ],
+  },
+  // Rota pública para visualização de links compartilhados
+  { path: "/share/:type/:id", element: <SharedView /> },
+  { path: "*", element: <NotFound /> },
+]);
+
+function App() {
+  return (
+    <>
+      <RouterProvider router={router} />
+      <Toaster />
+    </>
+  );
+}
 
 export default App;

@@ -1,81 +1,130 @@
-
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { 
-  LayoutDashboard, 
-  Users, 
-  Package, 
-  ShoppingCart, 
-  DollarSign, 
-  Factory, 
-  FileText, 
-  MessageSquare, 
-  Settings 
+import {
+  BarChart3,
+  ShoppingCart,
+  Users,
+  Package,
+  ListOrdered,
+  Factory,
+  MessageSquare,
+  FileText,
+  Settings,
+  Database,
+  Link2,
 } from "lucide-react";
 
-interface SidebarProps {
-  onCloseMobile?: () => void;
+interface MenuItemProps {
+  label: string;
+  icon: React.ReactNode;
+  href: string;
 }
 
-const navItems = [
-  { icon: LayoutDashboard, label: "Dashboard", path: "/" },
-  { icon: Users, label: "Entidades", path: "/entidades" },
-  { icon: Package, label: "Produtos", path: "/produtos" },
-  { icon: ShoppingCart, label: "Compras", path: "/compras" },
-  { icon: DollarSign, label: "Vendas", path: "/vendas" },
-  { icon: Factory, label: "Industrialização", path: "/industrializacao" },
-  { icon: FileText, label: "Relatórios", path: "/relatorios" },
-  { icon: MessageSquare, label: "Mensagens", path: "/mensagens" },
-  { icon: Settings, label: "Configurações", path: "/configuracoes" },
-];
-
-const Sidebar = ({ onCloseMobile }: SidebarProps) => {
+const Sidebar = ({ onCloseMobile }: { onCloseMobile?: () => void }) => {
   const location = useLocation();
-  
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const menuItems = [
+    {
+      label: "Dashboard",
+      icon: <BarChart3 size={20} />,
+      href: "/dashboard",
+    },
+    {
+      label: "Produtos",
+      icon: <Package size={20} />,
+      href: "/products",
+    },
+    {
+      label: "Entidades",
+      icon: <Users size={20} />,
+      href: "/entities",
+    },
+    {
+      label: "Compras",
+      icon: <ShoppingCart size={20} />,
+      href: "/purchases",
+    },
+    {
+      label: "Vendas",
+      icon: <ListOrdered size={20} />,
+      href: "/sales",
+    },
+    {
+      label: "Industrialização",
+      icon: <Factory size={20} />,
+      href: "/industrialization",
+    },
+    {
+      label: "Mensagens",
+      icon: <MessageSquare size={20} />,
+      href: "/messages",
+    },
+    {
+      label: "Relatórios",
+      icon: <FileText size={20} />,
+      href: "/reports",
+    },
+    {
+      label: "Links Compartilhados",
+      icon: <Link2 size={20} />,
+      href: "/shared-links",
+    },
+    {
+      label: "Configurações",
+      icon: <Settings size={20} />,
+      href: "/settings",
+    },
+  ];
+
   return (
-    <aside className="w-60 h-screen bg-sidebar border-r border-sidebar-border flex flex-col">
-      <div className="p-4 border-b border-sidebar-border flex items-center gap-2">
-        <div className="h-8 w-8 rounded-full bg-green-700 flex items-center justify-center text-white font-bold">
-          P
-        </div>
-        <div className="font-bold text-sidebar-foreground">
-          POTENCIAGRO<span className="text-xs ml-1 text-gray-400">v2.0</span>
-        </div>
+    <div
+      className={cn(
+        "flex flex-col h-full bg-[#1e2738] text-white border-r border-[#2a3447] w-64",
+        !isSidebarOpen ? "w-16" : ""
+      )}
+    >
+      <div className="p-4 flex items-center justify-between">
+        <span className="text-lg font-semibold">POTENCIAGRO</span>
+        <button onClick={toggleSidebar} className="focus:outline-none">
+          {/* You can use an icon here to toggle the sidebar */}
+          {isSidebarOpen ? "<<" : ">>"}
+        </button>
       </div>
-      
-      <nav className="flex-1 p-2 overflow-y-auto">
-        <ul className="space-y-1">
-          {navItems.map((item) => (
-            <li key={item.path}>
+      <div className="flex-grow p-4">
+        <ul className="space-y-2">
+          {menuItems.map((item) => (
+            <li key={item.label}>
               <Link
-                to={item.path}
+                to={item.href}
                 onClick={onCloseMobile}
                 className={cn(
-                  "flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors",
-                  location.pathname === item.path || 
-                  (item.path !== "/" && location.pathname.startsWith(item.path))
-                    ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                    : "text-sidebar-foreground hover:bg-sidebar-accent/50"
+                  "flex items-center space-x-3 p-2 rounded-md hover:bg-[#2a3447] transition-colors duration-200",
+                  location.pathname === item.href
+                    ? "bg-[#2a3447] font-semibold"
+                    : "font-medium"
                 )}
               >
-                <item.icon className="h-4 w-4" />
-                {item.label}
+                {item.icon}
+                <span className={cn(!isSidebarOpen ? "hidden" : "")}>
+                  {item.label}
+                </span>
               </Link>
             </li>
           ))}
         </ul>
-      </nav>
-      
-      <div className="p-4 border-t border-sidebar-border">
-        <div className="flex items-center gap-2">
-          <div className="h-6 w-6 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs">
-            LA
-          </div>
-          <div className="text-sm text-sidebar-foreground">Lucas Antunes</div>
-          <div className="ml-auto text-xs bg-gray-700 text-white px-1.5 py-0.5 rounded">v2.0</div>
-        </div>
       </div>
-    </aside>
+      <div className="p-4 border-t border-[#2a3447]">
+        <p className="text-sm text-gray-400">
+          Versão 2.0
+        </p>
+      </div>
+    </div>
   );
 };
 
