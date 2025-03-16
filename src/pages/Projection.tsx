@@ -7,13 +7,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Plus,
   Search,
-  FileText,
   Pencil,
   Trash,
   Eye,
   Filter,
-  Download,
-  Upload
+  CalendarIcon
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
@@ -24,10 +22,9 @@ interface Projection {
   id: number;
   date: string;
   entity: string;
-  invoiceNumber: string;
-  product: string;
-  quantity: string;
-  totalValue: string;
+  sackValue: string;
+  freightValue: string;
+  balance: string;
   status?: "pendente" | "aprovado" | "concluído" | "cancelado";
 }
 
@@ -37,30 +34,27 @@ const Projection = () => {
       id: 1,
       date: "25/10/2023",
       entity: "POTENCIAGRO LTDA",
-      invoiceNumber: "PRJ-001",
-      product: "Soja em Grãos - Padrão",
-      quantity: "100.000 kg",
-      totalValue: "R$ 983.400,00",
+      sackValue: "R$ 105,00",
+      freightValue: "R$ 35,00",
+      balance: "R$ 114.399,99",
       status: "aprovado"
     },
     {
       id: 2,
       date: "15/10/2023",
       entity: "Agrosul Comércio",
-      invoiceNumber: "PRJ-002",
-      product: "Farelo de soja",
-      quantity: "50.000 kg",
-      totalValue: "R$ 342.500,00",
+      sackValue: "R$ 103,50",
+      freightValue: "R$ 32,00",
+      balance: "R$ 98.760,00",
       status: "pendente"
     },
     {
       id: 3,
       date: "05/10/2023",
       entity: "Cooperativa Agrícola",
-      invoiceNumber: "PRJ-003",
-      product: "Óleo de soja bruto",
-      quantity: "30.000 L",
-      totalValue: "R$ 256.800,00",
+      sackValue: "R$ 104,20",
+      freightValue: "R$ 33,50",
+      balance: "R$ 105.480,00",
       status: "concluído"
     }
   ]);
@@ -84,8 +78,14 @@ const Projection = () => {
     }
   };
 
-  const handleCreateProjection = (newProjection: Projection) => {
-    setProjections([...projections, { ...newProjection, id: Date.now() }]);
+  const handleCreateProjection = (newProjection: any) => {
+    setProjections([...projections, { 
+      ...newProjection, 
+      id: Date.now(),
+      sackValue: `R$ ${newProjection.sackValue || "0,00"}`,
+      freightValue: `R$ ${newProjection.freightValue || "0,00"}`,
+      balance: `R$ ${newProjection.balance || "0,00"}`
+    }]);
     toast("Projeção criada com sucesso");
   };
 
@@ -93,8 +93,7 @@ const Projection = () => {
     // Search filter
     const matchesSearch = searchTerm === "" || 
       projection.entity.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      projection.product.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      projection.invoiceNumber.toLowerCase().includes(searchTerm.toLowerCase());
+      projection.date.toLowerCase().includes(searchTerm.toLowerCase());
     
     // Tab filter
     const matchesTab = activeTab === "todos" || 
@@ -130,20 +129,6 @@ const Projection = () => {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button 
-            variant="outline"
-            size="sm"
-          >
-            <Upload className="mr-2 h-4 w-4" />
-            Importar
-          </Button>
-          <Button 
-            variant="outline"
-            size="sm"
-          >
-            <Download className="mr-2 h-4 w-4" />
-            Exportar
-          </Button>
           <Button 
             size="sm"
             className="bg-blue-600 hover:bg-blue-700"
@@ -191,11 +176,10 @@ const Projection = () => {
                   <thead className="border-b bg-muted/40">
                     <tr>
                       <th className="h-12 px-4 text-left align-middle font-medium">Data</th>
-                      <th className="h-12 px-4 text-left align-middle font-medium">Entidade</th>
-                      <th className="h-12 px-4 text-left align-middle font-medium">Referência</th>
-                      <th className="h-12 px-4 text-left align-middle font-medium">Produto</th>
-                      <th className="h-12 px-4 text-left align-middle font-medium">Quantidade</th>
-                      <th className="h-12 px-4 text-left align-middle font-medium">Valor Total</th>
+                      <th className="h-12 px-4 text-left align-middle font-medium">Fornecedor</th>
+                      <th className="h-12 px-4 text-left align-middle font-medium">Valor da Saca</th>
+                      <th className="h-12 px-4 text-left align-middle font-medium">Valor do Frete</th>
+                      <th className="h-12 px-4 text-left align-middle font-medium">Saldo</th>
                       <th className="h-12 px-4 text-left align-middle font-medium">Status</th>
                       <th className="h-12 px-4 text-center align-middle font-medium">Ações</th>
                     </tr>
@@ -203,7 +187,7 @@ const Projection = () => {
                   <tbody>
                     {filteredProjections.length === 0 ? (
                       <tr>
-                        <td colSpan={8} className="p-4 text-center text-muted-foreground">
+                        <td colSpan={7} className="p-4 text-center text-muted-foreground">
                           Nenhum registro encontrado
                         </td>
                       </tr>
@@ -215,10 +199,9 @@ const Projection = () => {
                         >
                           <td className="p-4 align-middle">{projection.date}</td>
                           <td className="p-4 align-middle font-medium">{projection.entity}</td>
-                          <td className="p-4 align-middle">{projection.invoiceNumber}</td>
-                          <td className="p-4 align-middle">{projection.product}</td>
-                          <td className="p-4 align-middle">{projection.quantity}</td>
-                          <td className="p-4 align-middle font-medium">{projection.totalValue}</td>
+                          <td className="p-4 align-middle">{projection.sackValue}</td>
+                          <td className="p-4 align-middle">{projection.freightValue}</td>
+                          <td className="p-4 align-middle font-medium">{projection.balance}</td>
                           <td className="p-4 align-middle">
                             <Badge variant="outline" className={getStatusColor(projection.status)}>
                               {projection.status || "Não definido"}
