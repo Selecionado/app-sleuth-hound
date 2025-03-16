@@ -93,4 +93,41 @@
   body {
     @apply bg-background text-foreground;
   }
+  
+  /* Add explicit text colors for form elements based on theme */
+  .dark input,
+  .dark select,
+  .dark textarea {
+    @apply text-white;
+  }
+  
+  input,
+  select,
+  textarea {
+    @apply text-black;
+  }
+  
+  .dark label {
+    @apply text-white;
+  }
+  
+  label {
+    @apply text-black;
+  }
+  
+  .dark th {
+    @apply text-gray-100;
+  }
+  
+  th {
+    @apply text-gray-900;
+  }
+  
+  .dark td {
+    @apply text-gray-100;
+  }
+  
+  td {
+    @apply text-gray-900;
+  }
 }

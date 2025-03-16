@@ -1,10 +1,9 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Edit, Trash, Search, Filter, Download, Upload } from "lucide-react";
+import { Plus, Edit, Trash, Search, Filter } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 interface Product {
@@ -132,22 +131,6 @@ const Products = () => {
             Cadastro e gerenciamento de produtos
           </p>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <Button 
-            variant="outline" 
-            size="sm"
-          >
-            <Upload className="mr-2 h-4 w-4" />
-            Importar
-          </Button>
-          <Button 
-            variant="outline"
-            size="sm"
-          >
-            <Download className="mr-2 h-4 w-4" />
-            Exportar
-          </Button>
-        </div>
       </div>
       
       <Tabs defaultValue="produtos" onValueChange={setActiveTab} className="w-full">
@@ -178,7 +161,7 @@ const Products = () => {
             <CardContent className="p-0">
               <div className="relative overflow-x-auto rounded-b-lg">
                 <table className="w-full text-sm">
-                  <thead className="text-xs text-gray-700 uppercase bg-muted/40">
+                  <thead className="text-xs text-gray-700 dark:text-gray-300 uppercase bg-muted/40">
                     <tr>
                       <th scope="col" className="px-6 py-3 text-left">Produto</th>
                       <th scope="col" className="px-6 py-3 text-left">Descrição</th>
@@ -190,15 +173,15 @@ const Products = () => {
                   </thead>
                   <tbody>
                     {filteredProducts.length === 0 ? (
-                      <tr className="bg-white border-b hover:bg-gray-50">
+                      <tr className="bg-white dark:bg-transparent border-b hover:bg-gray-50 dark:hover:bg-gray-800/30">
                         <td colSpan={6} className="px-6 py-4 text-center text-muted-foreground">
                           Nenhum produto encontrado
                         </td>
                       </tr>
                     ) : (
                       filteredProducts.map((product) => (
-                        <tr key={product.id} className="bg-white border-b hover:bg-gray-50">
-                          <td className="px-6 py-4 font-medium text-gray-900">
+                        <tr key={product.id} className="bg-white dark:bg-transparent border-b hover:bg-gray-50 dark:hover:bg-gray-800/30">
+                          <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
                             {product.name}
                           </td>
                           <td className="px-6 py-4 max-w-[300px] truncate">
@@ -269,7 +252,7 @@ const Products = () => {
                       id="description"
                       name="description"
                       placeholder="Descrição do produto"
-                      className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+                      className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                       rows={4}
                       value={newProduct.description}
                       onChange={handleInputChange}
@@ -285,7 +268,7 @@ const Products = () => {
                     <select
                       id="category"
                       name="category"
-                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                       value={newProduct.category}
                       onChange={handleInputChange}
                     >
@@ -317,7 +300,7 @@ const Products = () => {
                       <select
                         id="unit"
                         name="unit"
-                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                         value={newProduct.unit}
                         onChange={handleInputChange}
                       >

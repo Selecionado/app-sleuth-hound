@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,8 +9,7 @@ import {
   Pencil,
   Trash,
   Eye,
-  Filter,
-  CalendarIcon
+  Filter
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
@@ -90,12 +88,10 @@ const Projection = () => {
   };
 
   const filteredProjections = projections.filter(projection => {
-    // Search filter
     const matchesSearch = searchTerm === "" || 
       projection.entity.toLowerCase().includes(searchTerm.toLowerCase()) ||
       projection.date.toLowerCase().includes(searchTerm.toLowerCase());
     
-    // Tab filter
     const matchesTab = activeTab === "todos" || 
       (activeTab === "pendentes" && projection.status === "pendente") ||
       (activeTab === "aprovados" && projection.status === "aprovado") ||
@@ -175,13 +171,13 @@ const Projection = () => {
                 <table className="w-full caption-bottom text-sm">
                   <thead className="border-b bg-muted/40">
                     <tr>
-                      <th className="h-12 px-4 text-left align-middle font-medium">Data</th>
-                      <th className="h-12 px-4 text-left align-middle font-medium">Fornecedor</th>
-                      <th className="h-12 px-4 text-left align-middle font-medium">Valor da Saca</th>
-                      <th className="h-12 px-4 text-left align-middle font-medium">Valor do Frete</th>
-                      <th className="h-12 px-4 text-left align-middle font-medium">Saldo</th>
-                      <th className="h-12 px-4 text-left align-middle font-medium">Status</th>
-                      <th className="h-12 px-4 text-center align-middle font-medium">Ações</th>
+                      <th className="h-12 px-4 text-left align-middle font-medium text-gray-900 dark:text-gray-100">Data</th>
+                      <th className="h-12 px-4 text-left align-middle font-medium text-gray-900 dark:text-gray-100">Fornecedor</th>
+                      <th className="h-12 px-4 text-left align-middle font-medium text-gray-900 dark:text-gray-100">Valor da Saca</th>
+                      <th className="h-12 px-4 text-left align-middle font-medium text-gray-900 dark:text-gray-100">Valor do Frete</th>
+                      <th className="h-12 px-4 text-left align-middle font-medium text-gray-900 dark:text-gray-100">Saldo</th>
+                      <th className="h-12 px-4 text-left align-middle font-medium text-gray-900 dark:text-gray-100">Status</th>
+                      <th className="h-12 px-4 text-center align-middle font-medium text-gray-900 dark:text-gray-100">Ações</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -197,11 +193,11 @@ const Projection = () => {
                           key={projection.id}
                           className="border-b transition-colors hover:bg-muted/50"
                         >
-                          <td className="p-4 align-middle">{projection.date}</td>
-                          <td className="p-4 align-middle font-medium">{projection.entity}</td>
-                          <td className="p-4 align-middle">{projection.sackValue}</td>
-                          <td className="p-4 align-middle">{projection.freightValue}</td>
-                          <td className="p-4 align-middle font-medium">{projection.balance}</td>
+                          <td className="p-4 align-middle text-gray-900 dark:text-gray-100">{projection.date}</td>
+                          <td className="p-4 align-middle font-medium text-gray-900 dark:text-gray-100">{projection.entity}</td>
+                          <td className="p-4 align-middle text-gray-900 dark:text-gray-100">{projection.sackValue}</td>
+                          <td className="p-4 align-middle text-gray-900 dark:text-gray-100">{projection.freightValue}</td>
+                          <td className="p-4 align-middle font-medium text-gray-900 dark:text-gray-100">{projection.balance}</td>
                           <td className="p-4 align-middle">
                             <Badge variant="outline" className={getStatusColor(projection.status)}>
                               {projection.status || "Não definido"}
