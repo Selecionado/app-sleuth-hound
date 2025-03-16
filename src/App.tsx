@@ -1,3 +1,4 @@
+
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Toaster } from "@/components/ui/sonner";
 import Layout from "@/components/Layout";
@@ -14,6 +15,7 @@ import Index from "@/pages/Index";
 import NotFound from "@/pages/NotFound";
 import SharedView from "@/pages/SharedView";
 import Stock from "./pages/Stock";
+import Projection from "./pages/Projection";
 
 import "./App.css";
 
@@ -28,6 +30,7 @@ const router = createBrowserRouter([
       { path: "entities", element: <Entities /> },
       { path: "purchases", element: <Purchases /> },
       { path: "sales", element: <Sales /> },
+      { path: "projection", element: <Projection /> },
       { path: "industrialization", element: <Industrialization /> },
       { path: "messages", element: <Messages /> },
       { path: "reports", element: <Reports /> },

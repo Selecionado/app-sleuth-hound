@@ -15,6 +15,7 @@ import {
   Warehouse,
   ChevronLeft,
   ChevronRight,
+  TrendingUp,
 } from "lucide-react";
 
 interface MenuItemProps {
@@ -56,6 +57,11 @@ const Sidebar = ({ onCloseMobile }: { onCloseMobile?: () => void }) => {
       label: "Vendas",
       icon: <ListOrdered size={20} />,
       href: "/sales",
+    },
+    {
+      label: "Projeção",
+      icon: <TrendingUp size={20} />,
+      href: "/projection",
     },
     {
       label: "Industrialização",
