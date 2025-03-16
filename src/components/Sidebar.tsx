@@ -12,7 +12,7 @@ import {
   MessageSquare,
   FileText,
   Settings,
-  Link2,
+  Warehouse,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
@@ -63,6 +63,11 @@ const Sidebar = ({ onCloseMobile }: { onCloseMobile?: () => void }) => {
       href: "/industrialization",
     },
     {
+      label: "Estoque",
+      icon: <Warehouse size={20} />,
+      href: "/stock",
+    },
+    {
       label: "Mensagens",
       icon: <MessageSquare size={20} />,
       href: "/messages",
@@ -71,11 +76,6 @@ const Sidebar = ({ onCloseMobile }: { onCloseMobile?: () => void }) => {
       label: "Relatórios",
       icon: <FileText size={20} />,
       href: "/reports",
-    },
-    {
-      label: "Links Compartilhados",
-      icon: <Link2 size={20} />,
-      href: "/shared-links",
     },
     {
       label: "Configurações",
@@ -131,9 +131,9 @@ const Sidebar = ({ onCloseMobile }: { onCloseMobile?: () => void }) => {
       
       <div className="p-4 border-t border-[#2a3447] flex items-center justify-center">
         {isSidebarOpen ? (
-          <p className="text-sm text-gray-400">Versão 2.0</p>
+          <p className="text-sm text-gray-400">Versão 2.5</p>
         ) : (
-          <p className="text-sm text-gray-400">v2</p>
+          <p className="text-sm text-gray-400">v2.5</p>
         )}
       </div>
     </div>

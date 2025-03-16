@@ -1,4 +1,3 @@
-
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Toaster } from "@/components/ui/sonner";
 import Layout from "@/components/Layout";
@@ -14,7 +13,7 @@ import Settings from "@/pages/Settings";
 import Index from "@/pages/Index";
 import NotFound from "@/pages/NotFound";
 import SharedView from "@/pages/SharedView";
-import SharedLinks from "@/pages/SharedLinks";
+import Stock from "./pages/Stock";
 
 import "./App.css";
 
@@ -33,10 +32,9 @@ const router = createBrowserRouter([
       { path: "messages", element: <Messages /> },
       { path: "reports", element: <Reports /> },
       { path: "settings", element: <Settings /> },
-      { path: "shared-links", element: <SharedLinks /> },
+      { path: "stock", element: <Stock /> },
     ],
   },
-  // Rota pública para visualização de links compartilhados
   { path: "/share/:type/:id", element: <SharedView /> },
   { path: "*", element: <NotFound /> },
 ]);
