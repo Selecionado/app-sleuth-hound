@@ -16,6 +16,7 @@ import NotFound from "@/pages/NotFound";
 import SharedView from "@/pages/SharedView";
 import Stock from "./pages/Stock";
 import Projection from "./pages/Projection";
+import Financial from "./pages/Financial";
 
 import "./App.css";
 
@@ -36,6 +37,7 @@ const router = createBrowserRouter([
       { path: "reports", element: <Reports /> },
       { path: "settings", element: <Settings /> },
       { path: "stock", element: <Stock /> },
+      { path: "financial", element: <Financial /> },
     ],
   },
   { path: "/share/:type/:id", element: <SharedView /> },

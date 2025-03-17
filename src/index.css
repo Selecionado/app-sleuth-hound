@@ -130,4 +130,24 @@
   td {
     @apply text-gray-900;
   }
+  
+  /* Fix placeholder text colors */
+  .dark input::placeholder,
+  .dark textarea::placeholder {
+    @apply text-gray-400;
+  }
+  
+  input::placeholder,
+  textarea::placeholder {
+    @apply text-gray-500;
+  }
+  
+  /* Ensure dropdown menus have proper text contrast */
+  .dark [data-radix-popper-content-wrapper] {
+    @apply text-white;
+  }
+  
+  [data-radix-popper-content-wrapper] {
+    @apply text-black;
+  }
 }
